@@ -3,16 +3,27 @@
         <a href="#/" class="back">
           返回
         </a>
+        <div class="photo">
+          <video src="" autoplay ref="video"></video>
+        </div>
         <div class="btn">
               开始拍照
         </div>
       </div>
-
 </template>
 
 <script>
     export default {
-        name: "photo"
+        name: "photo",
+        mounted(){
+          navigator.mediaDevices.getUserMedia({
+            video:{
+              width:300,height:320
+            }
+          }).then((stream)=> {
+              this.$refs.video.srcObject=stream;
+          })
+        }
     }
 </script>
 
@@ -46,5 +57,12 @@
     color:#fff;
     transition: all .5s linear;
     text-decoration: none;
+  }
+  .photo{
+    width:100%;height:320px;position: absolute;
+    left:0;top:40px;
+  }
+  video{
+    width:100%;height:100%;
   }
 </style>
