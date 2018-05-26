@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<img src="1.jpg" alt="" hidden>
+<canvas width="400" height="300">
+</canvas>
+<script>
+
+  window.onload = function () {
+
+    var img = document.querySelector("img");
+    var canvas = document.querySelector("canvas");
+    var cobj = canvas.getContext("2d");
+    cobj.drawImage(img, 0, 0, 400, 300);
+
+    var data=cobj.getImageData(0,0,400,300);
+
+
+
+    var sigma=5;
+    var a=2*Math.PI*Math.pow(sigma,2);
+    var b=2*Math.pow(sigma,2);
+    var radius=10;
+
+    function gs() {
+      var arr=[]
+      var sum=0;
+      for (var i = 0; i < radius; i++) {
+        for (var j = 0; j < radius; j++) {
+          var gaosi = 1 / a * Math.exp(-((j * j + i * i) / b));
+          if(!(arr[j] instanceof Array)){
+            arr[j]=[]
+          }
+          arr[j][i]=gaosi;
+          sum+=gaosi;
+        }
+      }
+      for(var i=0;i<arr.length;i++){
+        for(var j=0;j<arr[i].length;j++){
+            arr[i][j]=arr[i][j]/sum;
+        }
+      }
+      return arr;
+    }
+    console.log(gs());
+  }
+</script>
+</body>
+</html>
