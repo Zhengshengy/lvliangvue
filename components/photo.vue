@@ -5,8 +5,9 @@
         </a>
         <div class="photo">
           <video src="" autoplay ref="video"></video>
+          <canvas width="300" height="320" ref="canvas"></canvas>
         </div>
-        <div class="btn">
+        <div class="btn" ref="btn">
               开始拍照
         </div>
       </div>
@@ -22,7 +23,30 @@
             }
           }).then((stream)=> {
               this.$refs.video.srcObject=stream;
+              this.$refs.btn.onclick= ()=> {
+              var obj=this.$refs.video;
+              var canvas=this.$refs.canvas;
+              var cobj=canvas.getContext("2d");
+              cobj.drawImage(obj,0,0);
+              stream.getTracks()[0].stop();
+              var data=cobj.getImageData(0,0,300,320);
+              console.log(data);
+
+              var width=(data.width);
+              var height=(data.height);
+
+              for(var i=0;i<width*height;i++){
+                data.data[i*4+0]=255-data.data[i*4+0];
+                data.data[i*4+1]=255-data.data[i*4+1];
+                data.data[i*4+2]=255-data.data[i*4+2];
+                data.data[i*4+3]=255;
+              }
+              cobj.putImageData(data,0,0);
+
+              }
           })
+
+
         }
     }
 </script>
@@ -63,6 +87,12 @@
     left:0;top:40px;
   }
   video{
-    width:100%;height:100%;
+    width:300px;height:320px;padding:0;margin:0;
+    position: absolute;left:0;top:0px;
+  }
+  canvas{
+    position: absolute;
+    left:0;top:0px;
+    z-index:100
   }
 </style>
