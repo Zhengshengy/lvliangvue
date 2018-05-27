@@ -1,0 +1,19 @@
+html { font-size: 100px;}
+@media (min-width: 375px) and (max-width: 414px) {
+    html{font-size: 50px;}
+}
+@media (min-width: 415px) and (max-width: 639px) {
+    html{font-size: 55px;}
+}
+@media (min-width: 640px) and (max-width: 719px) {
+    html{font-size: 85px;}
+}
+@media (min-width: 720px) and (max-width: 749px) {
+    html{font-size: 96px;}
+}
+@media (min-width: 750px) and (max-width: 799px) {
+    html{font-size: 100px;}
+}
+@media (min-width: 800px) and (max-width: 992px) {
+    html{font-size: 107px;}
+}
