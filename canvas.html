@@ -12,24 +12,20 @@
 <canvas width="400" height="300">
 </canvas>
 <script>
-
+/*高斯滤波 模糊*/
   window.onload = function () {
-
     var img = document.querySelector("img");
     var canvas = document.querySelector("canvas");
     var cobj = canvas.getContext("2d");
     cobj.drawImage(img, 0, 0, 400, 300);
 
     var data=cobj.getImageData(0,0,400,300);
-
-
-
-    var sigma=5;
+    console.log(data);
+    var sigma=100;
     var a=2*Math.PI*Math.pow(sigma,2);
     var b=2*Math.pow(sigma,2);
     var radius=10;
-
-    function gs() {
+    function gs(radius=10) {
       var arr=[]
       var sum=0;
       for (var i = 0; i < radius; i++) {
@@ -49,7 +45,51 @@
       }
       return arr;
     }
-    console.log(gs());
+
+
+
+    var matrix=gs();
+
+    console.log(matrix);
+    var width=data.width;
+    var height=data.height;
+
+    for(var i=0;i<height;i++){  //图像y
+      for(var j=0;j<width;j++){  //图像 x
+          var r=0,g=0,b=0,sum=0;
+
+            for (var k = 0; k < radius; k++) {  // 滤波器 y
+              for (var h = 0; h < radius; h++) {  // 滤波器 x
+                var x = j + h;
+                var y = i + k;
+                if(height-radius<y){
+                  y=height-radius;
+                }
+                if(width-radius<x){
+                  x=width-radius;
+                }
+                r += data.data[x * 4 + y * width * 4 + 0] * matrix[k][h];
+                g += data.data[x * 4 + y * width * 4 + 1] * matrix[k][h];
+                b += data.data[x * 4 + y * width * 4 + 2] * matrix[k][h];
+                sum+=matrix[k][h];
+
+              }
+            }
+
+          r=parseInt(r/sum);
+          g=parseInt(g/sum);
+          b=parseInt(b/sum);
+          data.data[j*4+i*width*4+0]=r;
+          data.data[j*4+i*width*4+1]=g;
+          data.data[j*4+i*width*4+2]=b;
+
+      }
+    }
+
+
+     cobj.putImageData(data,0,0);
+
+
   }
 </script>
 </body>

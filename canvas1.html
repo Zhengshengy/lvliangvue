@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<img src="1.jpg" alt="" hidden>
+<canvas width="400" height="300">
+</canvas>
+<script>
+  window.onload = function () {
+    var img = document.querySelector("img");
+    var canvas = document.querySelector("canvas");
+
+    function distance(one,two) {
+       return Math.sqrt(Math.pow(one[0]-two[0],2)+Math.pow(one[1]-two[1],2)+Math.pow(one[2]-two[2],2));
+    }
+
+    function gaotong(canvas,img) {
+    var cobj = canvas.getContext("2d");
+    cobj.drawImage(img, 0, 0, 400, 300);
+    var data = cobj.getImageData(0, 0, 400, 300);
+    var width=data.width;
+    var height=data.height;
+    var gray=[125,125,125];
+    var black=[0,0,0];
+    var white=[255,255,255];
+    var val=60;
+
+    for(var y=0;y<height;y++){
+      for(var x=0;x<width;x++){
+           var current=[data.data[x*4+y*width*4]+0,data.data[x*4+y*width*4]+1,data.data[x*4+y*width*4]+2];
+           var right=[data.data[(x+1)*4+y*width*4]+0,data.data[(x+1)*4+y*width*4]+1,data.data[(x+1)*4+y*width*4]+2];
+           var bottom=[data.data[x*4+(y+1)*width*4]+0,data.data[x*4+(y+1)*width*4]+1,data.data[x*4+(y+1)*width*4]+2];
+          if(distance(current,right)>val&&distance(current,bottom)>val){
+            data.data[x*4+y*width*4+0]=white[0];
+            data.data[x*4+y*width*4+1]=white[1];
+            data.data[x*4+y*width*4+2]=white[2];
+          }else if(distance(current,right)<=val&&distance(current,bottom)<=val){
+            data.data[x*4+y*width*4+0]=black[0];
+            data.data[x*4+y*width*4+1]=black[1];
+            data.data[x*4+y*width*4+2]=black[2];
+          }else{
+            data.data[x*4+y*width*4+0]=gray[0];
+            data.data[x*4+y*width*4+1]=gray[1];
+            data.data[x*4+y*width*4+2]=gray[2];
+          }
+      }
+    }
+    cobj.putImageData(data,0,0);
+  }
+
+    gaotong(canvas,img)
+
+  }
+</script>
+</body>
+</html>
